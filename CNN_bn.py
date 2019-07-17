@@ -38,7 +38,7 @@ x = Dense(128, activation='relu', name='fc1')(x)
 #x = Dropout(0.5)(x)
 x = Dense(128, activation='relu', name='fc2')(x)
 #x = Lambda(lambda x: K.dropout(x, 0.5))(x)
-x = Dropout(0.5)(x)
+#x = Dropout(0.5)(x)
 x = Dense(10, activation='softmax', name='fc_output')(x)
 model = Model(input_data, x)
 
@@ -53,3 +53,25 @@ pre = model.predict(x_test)
 pre = np.argmax(pre, axis = 1)
 label = np.argmax(y_test, axis = 1)
 acc =np.mean(pre==label)
+
+
+
+
+#img = x_test[0,:,:,:]
+#img = np.expand_dims(img, axis=0)
+#
+#model_inter = Model(inputs=model.input, outputs=model.get_layer('block1_conv1').output)
+#interlayer_output = model_inter.predict(img)
+#block1_conv1 = interlayer_output[0,:,:,:]
+#
+#model_inter = Model(inputs=model.input, outputs=model.get_layer('bn_block1_conv1').output)
+#interlayer_output = model_inter.predict(img)
+#bn_block1_conv1 = interlayer_output[0,:,:,:]
+#
+#model_inter = Model(inputs=model.input, outputs=model.get_layer('block1_conv2').output)
+#interlayer_output = model_inter.predict(img)
+#block1_conv2 = interlayer_output[0,:,:,:]
+#
+#model_inter = Model(inputs=model.input, outputs=model.get_layer('bn_block1_conv2').output)
+#interlayer_output = model_inter.predict(img)
+#bn_block1_conv2 = interlayer_output[0,:,:,:]
