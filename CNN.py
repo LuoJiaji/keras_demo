@@ -39,7 +39,7 @@ x = MaxPooling2D((2, 2), strides=(2, 2), name='block2_pool')(x)
 x = Flatten(name='flatten')(x)
 x = Dense(128, activation='relu', name='fc1')(x)
 x = Dense(128, activation='relu', name='fc2')(x)
-x = Lambda(lambda x: K.dropout(x, 0.5))(x)
+#x = Lambda(lambda x: K.dropout(x, 0.5))(x)
 x = Dense(10, activation='softmax', name='fc_output')(x)
 model = Model(input_data, x)
 
