@@ -25,8 +25,7 @@ datagen = ImageDataGenerator(rotation_range = 90,  #图片随机转动的角度
                              width_shift_range = 0.1, #图片水平偏移的幅度
                              height_shift_range = 0.1, #图片竖直偏移的幅度
                              zoom_range = 0.1) #随机放大或缩小 
-gen = datagen.flow(data, batch_size=3)
-
+gen = datagen.flow(data, shuffle=False, batch_size=3)
 x_batch = next(gen)
 print(x_batch.shape)
 for n in range(5):
@@ -47,6 +46,7 @@ datagen = ImageDataGenerator(rotation_range = 10,  #图片随机转动的角度
                              zoom_range = 0.2) #随机放大或缩小 
 
 gen = datagen.flow_from_directory('img',
+                                   shuffle=False,
                                    target_size=(300, 300),
                                    batch_size=3)
 x_batch = next(gen)
