@@ -33,9 +33,10 @@ for i, p in enumerate(data_path):
     img = image.load_img(testdata_path + p, target_size=(img_height, img_width))
     img = image.img_to_array(img)
     img = np.expand_dims(img, axis = 0)
+    img /= 255
     # print(img.shape)
-    # pre = model.predict(img)
-    pre = [0.2, 0.3]
+    pre = model.predict(img)
+    # pre = [0.2, 0.3]
     result = np.argmax(pre)
     # result = 1
     # time.sleep(2)
