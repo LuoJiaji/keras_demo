@@ -1,6 +1,7 @@
 # 增加均衡采样
 # 增加自动保存模型功能, 可以自动加载已训练模型并继续训练
 # 增加日志文件的时间戳,方便管理
+# 增加数据增强功能
 
 import os
 import random
@@ -10,11 +11,11 @@ import matplotlib.pyplot as plt
 from keras.applications.vgg16 import VGG16, preprocess_input
 from keras.models import Model, load_model
 from keras.preprocessing import image
-from keras.preprocessing.image import load_img
-from keras.preprocessing.image import ImageDataGenerator
+from keras.preprocessing.image import load_img, ImageDataGenerator
 from keras.layers import Input, Dense, GlobalAveragePooling2D, Flatten, Dropout
 from keras.layers.convolutional import Conv2D
 from keras.layers.pooling import MaxPooling2D
+from keras.layers.normalization import BatchNormalization
 from sklearn.metrics import confusion_matrix
 from keras import callbacks, optimizers
 
@@ -85,7 +86,7 @@ def get_random_batch(datapath, label, batchsize, n_calss, img_width, img_height,
         img = image.load_img(datapath[class_index][img_index], target_size=(img_height, img_width))
         img = image.img_to_array(img)
         # x = np.expand_dims(x, axis=0)
-        img = preprocess_input(img)
+        # img = preprocess_input(img)
         data[i,:,:,:]  = img
 
         label_onehot[i, int(label[class_index][img_index])] = 1
@@ -95,6 +96,14 @@ def get_random_batch(datapath, label, batchsize, n_calss, img_width, img_height,
 
 # 加载文件路径
 train_datapath, train_label = get_datalist(train_dataset_path)
+
+
+# 数据增强
+datagen = ImageDataGenerator(rotation_range = 90,  #图片随机转动的角度
+                             width_shift_range = 0.1, #图片水平偏移的幅度
+                             height_shift_range = 0.1, #图片竖直偏移的幅度
+                             zoom_range = 0.1) #随机放大或缩小 
+
 # quit()
 # test_datalist, test_label = get_datalist(test_data_path) 
 
@@ -151,10 +160,10 @@ model = Model(inputs= input_tensor, outputs = x)
 
 model.compile(loss = 'categorical_crossentropy', optimizer = optimizers.SGD(), metrics = ['accuracy'])
 model.summary()
-#quit()
+quit()
 
 
-# 判断是否需要加载模型，并且继续训练
+# 判断是否需要加载模型, 并且继续训练
 model_file_list = []
 if os.path.exists(pre_model):
     # pre_path = 
@@ -176,13 +185,13 @@ if STATE == 'train':
     # log_file = './logs/logs.csv'
     # acc_file = './logs/acc.csv'
     f_log = open(log_file,'w')
-    f_log.write('iter,loss,train acc'+'\n')
+    f_log.write('iter, loss, train acc' + '\n')
     f_log.flush()
     # f_acc = open(acc_file,'w')
     # f_acc.write('iter,acc'+'\n')
     # f_acc.flush()
 
-    for it in range(start, start+STEPS):
+    for it in range(start, start + STEPS):
         train_data, train_label_onehot = get_random_batch(train_datapath,
                                                         train_label,
                                                         batch_size,
@@ -191,7 +200,8 @@ if STATE == 'train':
                                                         img_height,
                                                         channel)
         train_data  /= 225
-
+        gen = datagen.flow(train_data, shuffle=False, batch_size=batch_size)
+        train_data = next(gen)
         # train_data = train_data.astype('float')
         train_loss, train_accuracy = model.train_on_batch(train_data, train_label_onehot)
         
@@ -204,7 +214,7 @@ if STATE == 'train':
             f_log.flush()
         
         if it % 500 == 0:
-            model_file = log_path + '/CNN_'+str(it) + '.h5'
+            model_file = log_path + '/CNN_'+ str(it) + '.h5'
             model.save(model_file)
             model_file_list.append(model_file)
             
