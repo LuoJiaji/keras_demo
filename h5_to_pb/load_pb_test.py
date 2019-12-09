@@ -36,8 +36,8 @@ with tf.Graph().as_default():
         op = sess.graph.get_operations()
 
         # 打印图中有的操作
-        # for i,m in enumerate(op):
-        #     print('op{}:'.format(i),m.values())
+        for i,m in enumerate(op):
+            print('op{}:'.format(i), m.values())
 
         input_x = sess.graph.get_tensor_by_name("input_1:0")  # 具体名称看上一段代码的input.name
         print("input_X:",input_x)
