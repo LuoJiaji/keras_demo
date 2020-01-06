@@ -8,7 +8,7 @@ Created on Wed Jul 17 15:20:54 2019
 import cv2 
 import numpy as np
 from keras.datasets import mnist
-from keras.layers import Input, Flatten, Dense, Dropout, Layer,Lambda
+from keras.layers import Input, Flatten, Dense, Dropout, Layer, Lambda, SeparableConv2D
 from keras.layers.convolutional import Conv2D
 from keras.layers.pooling import MaxPooling2D
 from keras.optimizers import RMSprop, SGD
@@ -32,13 +32,11 @@ y_test = np_utils.to_categorical(y_test, num_classes=10)
 
 input_shape = (28,28,1)
 input_data = Input(shape=input_shape)
-x = Conv2D(filters = 32, kernel_size = (3, 3), strides=(1, 1), activation='relu', padding='same', name='block1_conv1')(input_data)
+x = Conv2D(32, (3, 3), activation='relu', padding='same', name='block1_conv1')(input_data)
 x = MaxPooling2D((2, 2), strides=(2, 2), name='block1_pool')(x)
-x = Conv2D(filters = 32, kernel_size = (3, 3), strides=(1, 1), activation='relu', padding='same', name='block1_conv2')(x)
+# x = Conv2D(32, (3, 3), activation='relu', padding='same', name='block1_conv2')(x)
+x = SeparableConv2D(32, (3, 3), activation='relu', padding='same', name='block1_conv2')(x)
 x = MaxPooling2D((2, 2), strides=(2, 2), name='block2_pool')(x)
-# x = Conv2D(filters = 32, kernel_size = (3, 3), strides=(1, 1), activation='relu', padding='valid', name='block1_conv3')(x)
-# x = Conv2D(filters = 32, kernel_size = (3, 3), strides=(1, 1), activation='relu', padding='valid', name='block1_conv4')(x)
-# x = Conv2D(filters = 32, kernel_size = (3, 3), strides=(1, 1), activation='relu', padding='valid', name='block1_conv5')(x)
 x = Flatten(name='flatten')(x)
 x = Dense(128, activation='relu', name='fc1')(x)
 x = Dense(128, activation='relu', name='fc2')(x)
