@@ -47,6 +47,18 @@ x = Dense(10, activation='softmax', name='fc_output')(x)
 model = Model(input_data, x)
 
 model.compile(loss = 'categorical_crossentropy', optimizer = optimizers.SGD(), metrics = ['accuracy'])
+model.compile(loss = 'categorical_crossentropy', optimizer = '' , metrics = ['accuracy'])
+
 model.summary()
-quit()
+#quit()
 model.fit(x_train, y_train, epochs=40, batch_size=128)
+
+pre = model.predict(x_test)
+pre = np.argmax(pre, axis = 1)
+y_test = np.argmax(y_test, axis = 1)
+acc = np.mean(pre == y_test)
+print('accuracy:', acc)
+
+# 98.56%
+# 98.66%
+# 98.66%
