@@ -43,7 +43,7 @@ x = Dense(128, activation='relu', name='fc2')(x)
 #x = Lambda(lambda x: K.dropout(x, 0.5))(x)
 x = Dense(10, activation='softmax', name='fc_output')(x)
 model = Model(input_data, x)
-
+quit()
 #model.compile(loss = 'categorical_crossentropy', optimizer = optimizers.SGD(), metrics = ['accuracy'])
 model.compile(loss = 'categorical_crossentropy', optimizer = RMSprop(), metrics = ['accuracy'])
 model.summary()
