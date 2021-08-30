@@ -67,4 +67,4 @@ def unet(pretrained_weights = None,input_size = (256,256,1)):
 if __name__ == "__main__":
     model = unet()
     model.summary()
-    plot_model(model, to_file='./unet.pdf',show_shapes=True)
+    # plot_model(model, to_file='./unet.pdf',show_shapes=True)

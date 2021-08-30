@@ -118,7 +118,7 @@ datagen = ImageDataGenerator(rotation_range = 90,  #图片随机转动的角度
 # x = Flatten(name='flatten')(x)
 # x = Dense(128, activation='relu', name='fc1')(x)
 # x = Dense(128, activation='relu', name='fc2')(x)
-# #x = Lambda(lambda x: K.dropout(x, 0.5))(x)
+# x = Lambda(lambda x: K.dropout(x, 0.5))(x)
 # x = Dense(30, activation='softmax', name='fc_output')(x)
 # model = Model(input_data, x)
 
